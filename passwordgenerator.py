@@ -1,22 +1,41 @@
+import string 
 import random
-import string
 
-print("==<== Welcome to our Random Password Generator ==>==")
-print("==<== ======================================== ==>==")
+def generate_password(min_length, numbers=True, special_characters=True):
+    s1 = string.ascii_letters
+    s2 = string.digits
+    s3 = string.punctuation
 
-def main():
-    
-    length=int(input("Enter the length of password you want: "))
+    characters = s1
+    if numbers:
+        characters += s2
+    if special_characters:
+        characters += s3
+ 
+    pwd =""
+    meets_criteria = False
+    has_number = False
+    has_special= False
 
-    lowerD=string.ascii_lowercase
-    upperD=string.ascii_uppercase
-    digitD=string.digits
-    symbolsD=string.punctuation
+    while not  meets_criteria or len(pwd) < min_length:
+        new_char = random.choice(characters)
+        pwd += new_char
 
-    combine=lowerD+upperD+digitD+symbolsD
-    
-    x=random.sample(combine,length)
-    password="".join(x)
-    print(password)
-    main()
-main()
+        if new_char in s2:
+            has_number = True
+        elif new_char in s3:
+            has_special = True
+        
+        meets_criteria = True
+        if numbers:
+            meets_criteria = has_number
+        if special_characters:
+            meets_criteria = meets_criteria and has_special
+
+    return pwd 
+
+min_length = int(input("Enter password length: "))
+has_number = input("Do you want numbers (y/n)? ").lower() == "y"
+has_special = input("Do you want to have special characters (y/n)? ").lower() == "y"
+pwd = generate_password(min_length, has_number, has_special)
+print("Your password is:", pwd)
